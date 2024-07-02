@@ -12,4 +12,5 @@ public interface CuentaDao {
     Cuenta findCuenta(long numeroCuenta);
 
     List<Cuenta> findAll();
+    Cuenta obtenerCuentaPorNumero(String numeroCuenta);
 }
