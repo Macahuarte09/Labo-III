@@ -4,9 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 public class Cuenta {
+
     private long numeroCuenta;
     LocalDateTime fechaCreacion;
-    int balance;
+    double balance;
     TipoCuenta tipoCuenta;
     Cliente titular;
     TipoMoneda moneda;
@@ -24,7 +25,6 @@ public class Cuenta {
     public void setTitular(Cliente titular) {
         this.titular = titular;
     }
-
 
     public TipoCuenta getTipoCuenta() {
         return tipoCuenta;
@@ -44,7 +44,6 @@ public class Cuenta {
         return this;
     }
 
-
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
@@ -54,37 +53,32 @@ public class Cuenta {
         return this;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public Cuenta setBalance(int balance) {
+    public Cuenta setBalance(double balance) {
         this.balance = balance;
         return this;
-    }
-
-    public void debitarDeCuenta(int cantidadADebitar) throws NoAlcanzaException, CantidadNegativaException {
-        if (cantidadADebitar < 0) {
-            throw new CantidadNegativaException();
-        }
-
-        if (balance < cantidadADebitar) {
-            throw new NoAlcanzaException();
-        }
-        this.balance = this.balance - cantidadADebitar;
     }
 
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public void forzaDebitoDeCuenta(int i) {
-        this.balance = this.balance - i;
-    }
-
     public long getNumeroCuenta() {
         return numeroCuenta;
     }
 
+    public void debitar(double monto) throws Exception {
+        if (monto > balance) {
+            throw new Exception("Saldo insuficiente");
+        }
+        this.balance -= monto;
+    }
 
+    public void acreditar(double monto) {
+        this.balance += monto;
+    }
 }
+

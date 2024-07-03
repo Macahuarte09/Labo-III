@@ -1,16 +1,30 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
 
-import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.Transferencia;
 import ar.edu.utn.frbb.tup.persistence.TransferenciaDao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransferenciaDaoImpl implements TransferenciaDao {
-    public void guardarTransferencia(Transferencia transferencia) {}
+
+    private List<Transferencia> transferencias = new ArrayList<>();
 
     @Override
-    public List<Transferencia> buscarTransferenciasPorCuenta(String numeroCuenta) {
-        return Cuenta;
+    public void guardarTransferencia(Transferencia transferencia) {
+        transferencias.add(transferencia);
+    }
+
+    @Override
+    public List<Transferencia> buscarTransferenciasPorCuenta(long numeroCuenta) {
+        List<Transferencia> resultado = new ArrayList<>();
+        for (Transferencia transferencia : transferencias) {
+            if (transferencia.getCuentaOrigen().getNumeroCuenta() == numeroCuenta ||
+                    transferencia.getCuentaDestino().getNumeroCuenta() == numeroCuenta) {
+                resultado.add(transferencia);
+            }
+        }
+        return resultado;
     }
 }

@@ -6,52 +6,48 @@ import ar.edu.utn.frbb.tup.model.NoAlcanzaException;
 import ar.edu.utn.frbb.tup.model.Transferencia;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import ar.edu.utn.frbb.tup.persistence.TransferenciaDao;
+import ar.edu.utn.frbb.tup.persistence.impl.TransferenciaDaoImpl;
 
 public class TransferenciaService {
-    private TransferenciaDao transferenciaDao;
+    private TransferenciaDaoImpl transferenciaDao;
     private CuentaDao cuentaDao;
 
-    public TransferenciaService(TransferenciaDao transferenciaDao, CuentaDao cuentaDao) {
+    public TransferenciaService(TransferenciaDaoImpl transferenciaDao, CuentaDao cuentaDao) {
         this.transferenciaDao = transferenciaDao;
         this.cuentaDao = cuentaDao;
     }
 
-    public void realizarTransferencia(String cuentaOrigen, String cuentaDestino, double monto) throws Exception, NoAlcanzaException, CantidadNegativaException {
-        if (cuentaOrigen.equals(cuentaDestino)) {
-            throw new Exception("La cuenta de origen y destino no pueden ser la misma.");
+    public void realizarTransferencia(long cuentaOrigenNumero, long cuentaDestinoNumero, double monto) throws Exception, NoAlcanzaException, CantidadNegativaException {
+        Cuenta cuentaOrigen = cuentaDao.findCuenta(cuentaOrigenNumero);
+        Cuenta cuentaDestino = cuentaDao.findCuenta(cuentaDestinoNumero);
+
+        // Verificar que ambas cuentas existan
+        if (cuentaOrigen == null) {
+            throw new Exception("Cuenta origen no encontrada");
+        }
+        if (cuentaDestino == null) {
+            throw new Exception("Cuenta destino no encontrada");
         }
 
-        if (monto <= 0) {
-            throw new Exception("El monto de la transferencia debe ser positivo.");
+        if (cuentaOrigen.getBalance() < monto) {
+            throw new Exception("Saldo insuficiente en la cuenta origen");
         }
 
-        // Obtener cuentas desde el DAO
-        Cuenta origen = cuentaDao.obtenerCuentaPorNumero(cuentaOrigen);
-        Cuenta destino = cuentaDao.obtenerCuentaPorNumero(cuentaDestino);
+        // Actualizar saldos
+        cuentaOrigen.debitar(monto);
+        cuentaDestino.acreditar(monto);
 
-        if (origen == null) {
-            throw new Exception("La cuenta de origen no existe.");
-        }
+        // Crear una nueva instancia de Transferencia
+        Transferencia transferencia = new Transferencia();
+        transferencia.setMonto(monto);
+        transferencia.setCuentaOrigen(cuentaOrigen);
+        transferencia.setCuentaDestino(cuentaDestino);
+        //transferencia.setFecha(LocalDateTime.now());
+        //transferencia.setEstado("COMPLETADA");
 
-        if (destino == null) {
-            throw new Exception("La cuenta de destino no existe.");
-        }
-
-        // Verificar saldo suficiente
-        if (origen.getBalance() < monto) {
-            throw new Exception("Saldo insuficiente en la cuenta de origen.");
-        }
-
-        // Realizar la transferencia
-        origen.debitarDeCuenta((int) monto); // Convertimos el monto a int
-        destino.setBalance(destino.getBalance() + (int) monto); // Convertimos el monto a int
-
-        // Guardar las actualizaciones en las cuentas
-        cuentaDao.saveCuenta(origen);
-        cuentaDao.saveCuenta(destino);
-
-        // Crear y guardar la transferencia
-        Transferencia transferencia = new Transferencia(cuentaOrigen, cuentaDestino, monto);
         transferenciaDao.guardarTransferencia(transferencia);
+
+        cuentaDao.actualizarCuenta(cuentaOrigen);
+        cuentaDao.actualizarCuenta(cuentaDestino);
     }
 }
