@@ -2,7 +2,6 @@ package ar.edu.utn.frbb.tup.model;
 
 public class Transferencia {
 
-    // Atributos de Transferencia.
     private Cuenta cuentaOrigen;
     private Cuenta cuentaDestino;
     private double monto;
@@ -18,7 +17,6 @@ public class Transferencia {
 
     public Transferencia(String cuentaOrigen, String cuentaDestino, double monto) {}
 
-    // Métodos getters y setters.
     public Cuenta getCuentaOrigen() {
         return cuentaOrigen;
     }
@@ -43,7 +41,6 @@ public class Transferencia {
         this.monto = monto;
     }
 
-    // Método para validar la transferencia
     public boolean validarTransferencia() {
         // Verificar que la cuenta de origen y la cuenta de destino sean diferentes
         if (cuentaOrigen.equals(cuentaDestino)) {
@@ -51,14 +48,11 @@ public class Transferencia {
             return false;
         }
 
-        // Verificar que el monto a transferir sea válido (positivo)
         if (monto <= 0) {
             System.out.println("Error: El monto a transferir debe ser mayor que cero.");
             return false;
         }
 
-        // La transferencia es válida
         return true;
     }
 }
-

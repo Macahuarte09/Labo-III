@@ -20,6 +20,12 @@ public class CuentaController {
     @Autowired
     private CuentaService cuentaService;
 
+    @GetMapping
+    public ResponseEntity<List<Cuenta>> findAll() {
+        List<Cuenta> cuentas = ((CuentaServiceImpl) cuentaService).findAll();
+        return new ResponseEntity<>(cuentas, HttpStatus.OK);
+    }
+
     @PostMapping("/alta")
     public ResponseEntity<String> altaCuenta(@RequestBody Cuenta cuenta) {
         try {
@@ -35,18 +41,4 @@ public class CuentaController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cuenta> obtenerCuenta(@PathVariable long numeroCuenta) {
-        Cuenta cuenta = cuentaService.find(numeroCuenta);
-        if (cuenta != null) {
-            return new ResponseEntity<>(cuenta, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Cuenta>> findAll() {
-        List<Cuenta> cuentas = ((CuentaServiceImpl) cuentaService).findAll();
-        return new ResponseEntity<>(cuentas, HttpStatus.OK);}
 }

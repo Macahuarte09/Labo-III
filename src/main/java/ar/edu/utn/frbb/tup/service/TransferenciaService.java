@@ -6,13 +6,12 @@ import ar.edu.utn.frbb.tup.model.NoAlcanzaException;
 import ar.edu.utn.frbb.tup.model.Transferencia;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import ar.edu.utn.frbb.tup.persistence.TransferenciaDao;
-import ar.edu.utn.frbb.tup.persistence.impl.TransferenciaDaoImpl;
 
 public class TransferenciaService {
-    private TransferenciaDaoImpl transferenciaDao;
+    private TransferenciaDao transferenciaDao;
     private CuentaDao cuentaDao;
 
-    public TransferenciaService(TransferenciaDaoImpl transferenciaDao, CuentaDao cuentaDao) {
+    public TransferenciaService(TransferenciaDao transferenciaDao, CuentaDao cuentaDao) {
         this.transferenciaDao = transferenciaDao;
         this.cuentaDao = cuentaDao;
     }
@@ -21,7 +20,6 @@ public class TransferenciaService {
         Cuenta cuentaOrigen = cuentaDao.findCuenta(cuentaOrigenNumero);
         Cuenta cuentaDestino = cuentaDao.findCuenta(cuentaDestinoNumero);
 
-        // Verificar que ambas cuentas existan
         if (cuentaOrigen == null) {
             throw new Exception("Cuenta origen no encontrada");
         }
@@ -33,11 +31,9 @@ public class TransferenciaService {
             throw new Exception("Saldo insuficiente en la cuenta origen");
         }
 
-        // Actualizar saldos
         cuentaOrigen.debitar(monto);
         cuentaDestino.acreditar(monto);
 
-        // Crear una nueva instancia de Transferencia
         Transferencia transferencia = new Transferencia();
         transferencia.setMonto(monto);
         transferencia.setCuentaOrigen(cuentaOrigen);

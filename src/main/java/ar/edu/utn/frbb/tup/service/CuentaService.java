@@ -15,5 +15,5 @@ public interface CuentaService {
 
     Cuenta find(long id);
 
-    List<Cuenta>findAll();
+    List<Cuenta> findAll();
 }
