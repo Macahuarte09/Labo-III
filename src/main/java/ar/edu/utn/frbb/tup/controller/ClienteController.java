@@ -23,15 +23,15 @@ public class ClienteController {
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
+    @GetMapping("/{dni}")
+    public ResponseEntity<Cliente> getClienteByID(@PathVariable("dni") long dni) {
+        Cliente cliente = clienteService.buscarClientePorDni(dni);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
     @PostMapping("/alta")
-    public ResponseEntity<String> altaCliente(@RequestBody Cliente cliente) {
-        try {
-            clienteService.darDeAltaCliente(cliente);
-            return new ResponseEntity<>("Cliente creado con éxito", HttpStatus.CREATED);
-        } catch (ClienteAlreadyExistsException e) {
-            return new ResponseEntity<>("Error al crear el cliente: " + e.getMessage(), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error inesperado: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<String> altaCliente(@RequestBody Cliente cliente) throws ClienteAlreadyExistsException {   //public String altaCliente(@RequestBody ClienteDto clienteDto)
+        clienteService.darDeAltaCliente(cliente);
+        return new ResponseEntity<>("Cliente creado con éxito", HttpStatus.CREATED);
     }
 }
