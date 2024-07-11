@@ -1,5 +1,7 @@
 package ar.edu.utn.frbb.tup.service.impl;
 
+import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
@@ -9,6 +11,7 @@ import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -20,7 +23,9 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void darDeAltaCliente(Cliente cliente) throws ClienteAlreadyExistsException {
+    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException {
+        Cliente cliente = new Cliente(clienteDto);
+
         if (clienteDao.findCliente(cliente.getDni(), false) != null) {
             throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
         }
@@ -34,17 +39,19 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         clienteDao.saveCliente(cliente);
+        return cliente;
     }
 
     @Override
     public void agregarCuenta(Cuenta cuenta, long dniTitular) throws TipoCuentaAlreadyExistsException {
-        Cliente titular = buscarClientePorDni(dniTitular);
-        cuenta.setTitular(titular);
-        if (titular.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getMoneda())) {
-            throw new TipoCuentaAlreadyExistsException("El cliente ya posee una cuenta de ese tipo y moneda");
+        Cliente cliente = buscarClientePorDni(dniTitular);
+        if (cliente != null) {
+            cliente.getCuentas().add(cuenta);
+            cuenta.setTitular(cliente);
+            clienteDao.saveCliente(cliente);
+        } else {
+            throw new IllegalArgumentException("Cliente no encontrado con DNI: " + dniTitular);
         }
-        titular.addCuenta(cuenta);
-        clienteDao.saveCliente(titular);
     }
 
     @Override
@@ -59,5 +66,21 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public List<Cliente> obtenerTodosLosClientes() {
         return clienteDao.findAll();
+    }
+
+    public List<CuentaDto> obtenerCuentasPorDniTitular(long dni) {
+        Cliente cliente = buscarClientePorDni(dni);
+        return cliente.getCuentas().stream().map(cuenta -> {
+            CuentaDto cuentaDto = new CuentaDto();
+            cuentaDto.setNumeroCuenta(cuenta.getNumeroCuenta());
+            cuentaDto.setFechaCreacion(cuenta.getFechaCreacion());
+            cuentaDto.setBalance(cuenta.getBalance());
+            cuentaDto.setTipoCuenta(cuenta.getTipoCuenta().toString());
+            cuentaDto.setMoneda(cuenta.getMoneda().toString());
+            cuentaDto.setDniTitular(cliente.getDni());
+            cuentaDto.setNombreTitular(cliente.getNombre());
+            cuentaDto.setApellidoTitular(cliente.getApellido());
+            return cuentaDto;
+        }).collect(Collectors.toList());
     }
 }

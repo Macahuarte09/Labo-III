@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.controller;
 
-import ar.edu.utn.frbb.tup.model.Cliente;
+import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
@@ -21,6 +22,9 @@ public class CuentaController {
     @Autowired
     private CuentaService cuentaService;
 
+    @Autowired
+    private CuentaValidator cuentaValidator;
+
     @GetMapping
     public ResponseEntity<List<Cuenta>> findAll() {
         List<Cuenta> cuentas = ((CuentaServiceImpl) cuentaService).findAll();
@@ -34,8 +38,10 @@ public class CuentaController {
     }
 
     @PostMapping("/alta")
-    public ResponseEntity<String> altaCuenta(@RequestBody Cuenta cuenta) throws CuentaNoSoportadaException, TipoCuentaAlreadyExistsException, CuentaAlreadyExistsException {
-        cuentaService.darDeAltaCuenta(cuenta);
-        return new ResponseEntity<>("Cuenta creada con éxito", HttpStatus.CREATED);
+    public Cuenta altaCuenta(@RequestBody CuentaDto cuentaDto) throws CuentaNoSoportadaException, TipoCuentaAlreadyExistsException, CuentaAlreadyExistsException {
+        cuentaValidator.validate(cuentaDto);
+        return cuentaService.darDeAltaCuenta(cuentaDto);
     }
+
+    //Put setTitular()
 }

@@ -26,7 +26,7 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     }
 
     @ExceptionHandler(value
-            = {IllegalStateException.class})
+            = { IllegalStateException.class })
     protected ResponseEntity<Object> handleConflict(
             RuntimeException ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
@@ -44,7 +44,6 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             error.setErrorMessage(ex.getMessage());
             body = error;
         }
-
         return new ResponseEntity(body, headers, status);
     }
 }

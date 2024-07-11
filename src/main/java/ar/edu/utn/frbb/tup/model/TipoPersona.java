@@ -1,8 +1,5 @@
 package ar.edu.utn.frbb.tup.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum TipoPersona {
 
     PERSONA_FISICA("F"),
@@ -14,12 +11,10 @@ public enum TipoPersona {
         this.descripcion = descripcion;
     }
 
-    @JsonValue
     public String getDescripcion() {
         return descripcion;
     }
 
-    @JsonCreator
     public static TipoPersona fromString(String text) {
         for (TipoPersona tipo : TipoPersona.values()) {
             if (tipo.descripcion.equalsIgnoreCase(text)) {
