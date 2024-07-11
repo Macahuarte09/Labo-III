@@ -12,7 +12,6 @@ public class CuentaDto {
     private String nombreTitular;
     private String apellidoTitular;
 
-
     public long getNumeroCuenta() {
         return numeroCuenta;
     }

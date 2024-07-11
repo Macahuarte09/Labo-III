@@ -1,14 +1,10 @@
 package ar.edu.utn.frbb.tup.controller;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
-import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
-import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.service.ClienteService;
-import ar.edu.utn.frbb.tup.service.impl.ClienteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,17 +40,5 @@ public class ClienteController {
         return clienteService.darDeAltaCliente(clienteDto);
     }
 
-    @PostMapping("/cuentas")
-    public ResponseEntity<Cliente> agregarCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaAlreadyExistsException {
-        Cuenta cuenta = new Cuenta(cuentaDto);
-        clienteService.agregarCuenta(cuenta, cuentaDto.getDniTitular());
-        Cliente cliente = clienteService.buscarClientePorDni(cuentaDto.getDniTitular());
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
-    }
-
-    @GetMapping("/{dni}/cuentas")
-    public ResponseEntity<List<CuentaDto>> getCuentasByDniTitular(@PathVariable("dni") long dni) {
-        List<CuentaDto> cuentas = ((ClienteServiceImpl) clienteService).obtenerCuentasPorDniTitular(dni);
-        return new ResponseEntity<>(cuentas, HttpStatus.OK);
-    }
+    //Put addCuenta()
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.service.impl;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
@@ -11,7 +12,9 @@ import ar.edu.utn.frbb.tup.service.ClienteService;
 import ar.edu.utn.frbb.tup.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CuentaServiceImpl implements CuentaService {
@@ -53,7 +56,20 @@ public class CuentaServiceImpl implements CuentaService {
         return cuentaDao.findCuenta(id);
     }
 
-    public List<Cuenta> findAll() {
-        return cuentaDao.findAll();
+    @Override
+    public List<CuentaDto> findAll() {
+        return cuentaDao.findAll().stream().map(cuenta -> {
+            Cliente titular = cuenta.getTitular();
+            CuentaDto cuentaDto = new CuentaDto();
+            cuentaDto.setNumeroCuenta(cuenta.getNumeroCuenta());
+            cuentaDto.setFechaCreacion(cuenta.getFechaCreacion());
+            cuentaDto.setBalance(cuenta.getBalance());
+            cuentaDto.setTipoCuenta(cuenta.getTipoCuenta().toString());
+            cuentaDto.setMoneda(cuenta.getMoneda().toString());
+            cuentaDto.setDniTitular(titular.getDni());
+            cuentaDto.setNombreTitular(titular.getNombre());
+            cuentaDto.setApellidoTitular(titular.getApellido());
+            return cuentaDto;
+        }).collect(Collectors.toList());
     }
 }
