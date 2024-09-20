@@ -3,7 +3,7 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
-import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,16 +29,28 @@ public class ClienteController {
     }
 
     @GetMapping("/{dni}")
-    public ResponseEntity<Cliente> getClienteByID(@PathVariable("dni") long dni) {
+    public ResponseEntity<Cliente> getClienteByID(@PathVariable("dni") long dni) throws ClienteNoEncontradoException {
         Cliente cliente = clienteService.buscarClientePorDni(dni);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @PostMapping("/alta")
-    public Cliente altaCliente(@RequestBody ClienteDto clienteDto) throws ClienteAlreadyExistsException {
+    public ResponseEntity<?> altaCliente(@RequestBody ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatoIngresadoInvalidoException, ClienteMenorDeEdadException {
         clienteValidator.validate(clienteDto);
-        return clienteService.darDeAltaCliente(clienteDto);
+        Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
+        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
 
-    //Put addCuenta()
+    @PutMapping("/actualizar")
+    public ResponseEntity<Cliente> actualizarCliente(@RequestBody ClienteDto clienteDto) throws ClienteNoEncontradoException, DatoIngresadoInvalidoException {
+        clienteValidator.validate(clienteDto);
+        Cliente cliente = clienteService.actualizarCliente(clienteDto);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{dni}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable("dni") long dni) throws ClienteNoEncontradoException{
+        clienteService.eliminarCliente(dni);
+        return new ResponseEntity<>("Cliente eliminado correctamente",HttpStatus.OK);
+    }
 }

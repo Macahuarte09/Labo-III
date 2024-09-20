@@ -15,11 +15,19 @@ public enum TipoMoneda {
     }
 
     public static TipoMoneda fromString(String text) {
-        for (TipoMoneda tipo : TipoMoneda.values()) {
-            if (tipo.descripcion.equalsIgnoreCase(text)) {
-                return tipo;
-            }
+        if (text == null) {
+            throw new IllegalArgumentException("El tipo de moneda no es correcto");
         }
-        throw new IllegalArgumentException("No se pudo encontrar un TipoMoneda con la descripción: " + text);
+
+        switch (text.toLowerCase()) {
+            case "p":
+            case "pesos":
+                return PESOS;
+            case "d":
+            case "dolares":
+                return DOLARES;
+            default:
+                throw new IllegalArgumentException("El tipo de moneda no es correcto");
+        }
     }
 }

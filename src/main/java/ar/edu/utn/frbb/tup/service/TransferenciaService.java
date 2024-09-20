@@ -1,9 +1,16 @@
 package ar.edu.utn.frbb.tup.service;
 
-import ar.edu.utn.frbb.tup.model.CantidadNegativaException;
-import ar.edu.utn.frbb.tup.model.NoAlcanzaException;
+import ar.edu.utn.frbb.tup.controller.dto.TransferenciaDto;
+import ar.edu.utn.frbb.tup.model.Transferencia;
+import ar.edu.utn.frbb.tup.model.exception.*;
+
+import java.util.List;
 
 public interface TransferenciaService {
 
-    void realizarTransferencia(long cuentaOrigenNumero, long cuentaDestinoNumero, double monto) throws Exception, NoAlcanzaException, CantidadNegativaException;
+    Transferencia realizarTransferencia(TransferenciaDto transferenciaDto) throws Exception, NoAlcanzaException, CantidadNegativaException, CuentaNoEncontradaException, TipoMonedaException;
+
+    List<Transferencia> find(long id);
+
+    List<Transferencia> findAll();
 }

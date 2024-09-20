@@ -9,14 +9,12 @@ public class Persona {
     private long dni;
     private LocalDate fechaNacimiento;
 
+    public Persona(){}
+
     public Persona(String nombre, String apellido, long dni) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
-    }
-
-    public Persona() {
-
     }
 
     public String getNombre() {

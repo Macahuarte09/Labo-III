@@ -4,6 +4,10 @@ import ar.edu.utn.frbb.tup.model.Transferencia;
 import java.util.List;
 
 public interface TransferenciaDao {
+
     void guardarTransferencia(Transferencia transferencia);
-    List<Transferencia> buscarTransferenciasPorCuenta(long numeroCuenta);
+
+    List<Transferencia> findTransfersByID(long numeroCuenta);
+
+    List<Transferencia> findAllTransfers();
 }

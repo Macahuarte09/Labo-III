@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.persistence;
 
-import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.exception.CuentaNoEncontradaException;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface CuentaDao {
 
     List<Cuenta> findAll();
 
-    Cuenta obtenerCuentaPorNumero(String numeroCuenta);
+    Cuenta updateCuenta(Cuenta cuenta);
 
-    void actualizarCuenta(Cuenta cuenta);
+    void deleteCuenta(long id);
 }

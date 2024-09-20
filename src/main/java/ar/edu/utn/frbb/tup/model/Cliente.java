@@ -7,12 +7,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cliente extends Persona {
+public class Cliente extends Persona{
 
     private TipoPersona tipoPersona;
     private String banco;
     private LocalDateTime fechaAlta;
-
     @JsonManagedReference
     private Set<Cuenta> cuentas = new HashSet<>();
 
@@ -20,17 +19,17 @@ public class Cliente extends Persona {
         this.fechaAlta = LocalDateTime.now();
     }
 
-    public Cliente(String nombre, String apellido, long dni, TipoPersona tipoPersona, String banco) {
+    public Cliente(String nombre, String apellido, long dni, TipoPersona tipoPersona) {
         super(nombre, apellido, dni);
         this.tipoPersona = tipoPersona;
-        this.banco = banco;
+        this.banco = "Banco De Ando";
         this.fechaAlta = LocalDateTime.now();
     }
 
     public Cliente(ClienteDto clienteDto){
         super(clienteDto.getNombre(), clienteDto.getApellido(), clienteDto.getDni());
         this.setFechaNacimiento(clienteDto.getFechaNacimiento());
-        this.banco = clienteDto.getBanco();
+        this.banco = "Banco De Ando";
         this.tipoPersona = TipoPersona.fromString(clienteDto.getTipoPersona());
         this.fechaAlta = LocalDateTime.now();
     }
@@ -69,7 +68,8 @@ public class Cliente extends Persona {
     }
 
     public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
-        for (Cuenta cuenta : cuentas) {
+        for (Cuenta cuenta:
+                cuentas) {
             if (tipoCuenta.equals(cuenta.getTipoCuenta()) && moneda.equals(cuenta.getMoneda())) {
                 return true;
             }
@@ -87,3 +87,4 @@ public class Cliente extends Persona {
                 '}';
     }
 }
+

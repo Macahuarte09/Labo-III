@@ -1,6 +1,9 @@
 package ar.edu.utn.frbb.tup.persistence.impl;
+
 import java.util.*;
+
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.exception.CuentaNoEncontradaException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.stereotype.Service;
 
@@ -26,21 +29,14 @@ public class CuentaDaoImpl implements CuentaDao {
     }
 
     @Override
-    public Cuenta obtenerCuentaPorNumero(String numeroCuenta) {
-        try {
-            long numero = Long.parseLong(numeroCuenta);
-            return repositorioCuentas.get(numero);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+    public Cuenta updateCuenta(Cuenta cuenta) {
+        repositorioCuentas.put(cuenta.getNumeroCuenta(), cuenta);
+        return cuenta;
     }
 
     @Override
-    public void actualizarCuenta(Cuenta cuenta) {
-        if (repositorioCuentas.containsKey(cuenta.getNumeroCuenta())) {
-            repositorioCuentas.put(cuenta.getNumeroCuenta(), cuenta);
-        } else {
-            throw new IllegalArgumentException("Cuenta no encontrada: " + cuenta.getNumeroCuenta());
-        }
+    public void deleteCuenta(long id){
+        repositorioCuentas.remove(id);
     }
+
 }

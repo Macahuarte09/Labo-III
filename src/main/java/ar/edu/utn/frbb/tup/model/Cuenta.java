@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDateTime;
@@ -12,14 +13,15 @@ public class Cuenta {
     LocalDateTime fechaCreacion;
     double balance;
     TipoCuenta tipoCuenta;
-
     @JsonBackReference
     Cliente titular;
-
     TipoMoneda moneda;
 
     public Cuenta() {
-        this.numeroCuenta = Math.abs(new Random().nextInt()) + 1;
+        Random random = new Random();
+        int lowerBound = 1000000;
+        int upperBound = 9000000;
+        this.numeroCuenta = lowerBound + random.nextInt(upperBound);
         this.fechaCreacion = LocalDateTime.now();
         this.balance = 0;
     }
@@ -28,8 +30,11 @@ public class Cuenta {
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
         this.moneda = TipoMoneda.fromString(cuentaDto.getMoneda());
         this.fechaCreacion = LocalDateTime.now();
-        this.balance = 0;
-        this.numeroCuenta = new Random().nextLong();
+        this.balance = cuentaDto.getBalance();
+        Random random = new Random();
+        int lowerBound = 1000000;
+        int upperBound = 9000000;
+        this.numeroCuenta = lowerBound + random.nextInt(upperBound); //genera numero de 7 digitos
     }
 
     public Cliente getTitular() {
@@ -84,9 +89,9 @@ public class Cuenta {
         return numeroCuenta;
     }
 
-    public void debitar(double monto) throws Exception {
+    public void debitar(double monto) throws NoAlcanzaException {
         if (monto > balance) {
-            throw new Exception("Saldo insuficiente");
+            throw new NoAlcanzaException("Saldo insuficiente");
         }
         this.balance -= monto;
     }

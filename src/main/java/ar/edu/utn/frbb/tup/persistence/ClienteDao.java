@@ -8,7 +8,11 @@ public interface ClienteDao {
 
     Cliente saveCliente(Cliente cliente);
 
-    Cliente findCliente(long dni, boolean b);
+    Cliente findCliente(long dni);
 
     List<Cliente> findAll();
+
+    Cliente updateCliente(Cliente cliente);
+
+    void deleteCliente(long dni);
 }

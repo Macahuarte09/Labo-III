@@ -1,35 +1,42 @@
 package ar.edu.utn.frbb.tup.model;
 
+import ar.edu.utn.frbb.tup.controller.dto.TransferenciaDto;
+
+import java.time.LocalDateTime;
+
 public class Transferencia {
 
-    private Cuenta cuentaOrigen;
-    private Cuenta cuentaDestino;
+    private long cuentaOrigen;
+    private long cuentaDestino;
     private double monto;
+    private TipoMoneda moneda;
+    private LocalDateTime fecha;
 
-    // Constructor
-    public Transferencia(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto) {
-        this.cuentaOrigen = cuentaOrigen;
-        this.cuentaDestino = cuentaDestino;
-        this.monto = monto;
+    public Transferencia() {
+        this.fecha = LocalDateTime.now();
     }
 
-    public Transferencia() {}
+    public Transferencia(TransferenciaDto transferenciaDto) {
+        this.cuentaOrigen = transferenciaDto.getCuentaOrigen();
+        this.cuentaDestino = transferenciaDto.getCuentaDestino();
+        this.monto = transferenciaDto.getMonto();
+        this.moneda = TipoMoneda.fromString(transferenciaDto.getMoneda());
+        this.fecha = LocalDateTime.now();
+    }
 
-    public Transferencia(String cuentaOrigen, String cuentaDestino, double monto) {}
-
-    public Cuenta getCuentaOrigen() {
+    public long getCuentaOrigen() {
         return cuentaOrigen;
     }
 
-    public void setCuentaOrigen(Cuenta cuentaOrigen) {
+    public void setCuentaOrigen(long cuentaOrigen) {
         this.cuentaOrigen = cuentaOrigen;
     }
 
-    public Cuenta getCuentaDestino() {
+    public long getCuentaDestino() {
         return cuentaDestino;
     }
 
-    public void setCuentaDestino(Cuenta cuentaDestino) {
+    public void setCuentaDestino(long cuentaDestino) {
         this.cuentaDestino = cuentaDestino;
     }
 
@@ -37,22 +44,13 @@ public class Transferencia {
         return monto;
     }
 
-    public void setMonto(double monto) {
-        this.monto = monto;
-    }
+    public void setMonto(double monto) {this.monto = monto;}
 
-    public boolean validarTransferencia() {
-        // Verificar que la cuenta de origen y la cuenta de destino sean diferentes
-        if (cuentaOrigen.equals(cuentaDestino)) {
-            System.out.println("Error: La cuenta de origen y la cuenta de destino son iguales.");
-            return false;
-        }
+    public TipoMoneda getMoneda() {return moneda;}
 
-        if (monto <= 0) {
-            System.out.println("Error: El monto a transferir debe ser mayor que cero.");
-            return false;
-        }
+    public void setMoneda(TipoMoneda moneda) {this.moneda = moneda;}
 
-        return true;
-    }
+    public LocalDateTime getFecha() {return fecha;}
+
+    public void setFecha(LocalDateTime fecha) {this.fecha = fecha;}
 }
