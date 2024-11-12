@@ -12,7 +12,6 @@ import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class ClienteServiceImpl implements ClienteService {
 

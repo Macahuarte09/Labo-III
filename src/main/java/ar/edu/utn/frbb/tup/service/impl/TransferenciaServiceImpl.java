@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class TransferenciaServiceImpl implements TransferenciaService {
 
     private TransferenciaDao transferenciaDao;

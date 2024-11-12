@@ -1,6 +1,6 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
-import ar.edu.utn.frbb.tup.model.CantidadNegativaException;
+import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
 import ar.edu.utn.frbb.tup.model.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
