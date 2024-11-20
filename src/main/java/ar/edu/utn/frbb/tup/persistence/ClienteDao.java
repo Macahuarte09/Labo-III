@@ -1,8 +1,10 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cliente;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
 
 public interface ClienteDao {
 

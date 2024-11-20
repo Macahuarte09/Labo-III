@@ -2,9 +2,10 @@ package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoEncontradaException;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface CuentaDao {
 
     Cuenta saveCuenta(Cuenta cuenta);
