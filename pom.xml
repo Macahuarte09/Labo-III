@@ -12,13 +12,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tup</name>
 	<description>Proyecto de Laboratorio III en Spring Boot</description>
-	<url/>
 	<properties>
-		<java.version>17</java.version> <!-- Cambiado a 17 -->
+		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -42,13 +42,7 @@
 			<version>5.11.0</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<pluginManagement>
