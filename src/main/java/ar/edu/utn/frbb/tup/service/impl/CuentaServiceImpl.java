@@ -71,4 +71,6 @@ public class CuentaServiceImpl implements CuentaService {
         }
         cuentaDao.deleteCuenta(id);
     }
+
+
 }
