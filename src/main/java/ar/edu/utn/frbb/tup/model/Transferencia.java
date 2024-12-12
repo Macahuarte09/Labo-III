@@ -24,6 +24,9 @@ public class Transferencia {
         this.fecha = LocalDateTime.now();
     }
 
+    public Transferencia(long l, long l1, double v) {
+    }
+
     public long getCuentaOrigen() {
         return cuentaOrigen;
     }

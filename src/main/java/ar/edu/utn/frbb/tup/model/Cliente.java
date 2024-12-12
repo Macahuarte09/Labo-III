@@ -34,6 +34,9 @@ public class Cliente extends Persona{
         this.fechaAlta = LocalDateTime.now();
     }
 
+    public Cliente(long l, String juanPerez) {
+    }
+
     public TipoPersona getTipoPersona() {
         return tipoPersona;
     }
