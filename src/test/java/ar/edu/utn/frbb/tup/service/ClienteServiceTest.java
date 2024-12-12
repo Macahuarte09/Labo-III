@@ -1,4 +1,7 @@
 package ar.edu.utn.frbb.tup.service;
 
-public class ClienteServiceTest {
+import static org.junit.jupiter.api.Assertions.*;
+class ClienteServiceTest {
+
+  
 }

@@ -48,39 +48,39 @@ class ClienteControllerTest {
     }
 
     @Test
-    public void testGetClienteByDni() throws ClienteNoEncontradoException {
-        Cliente cliente = new Cliente();
-        cliente.setDni(12345678L);
+    public void testGetClienteByDNI() throws ClienteNoEncontradoException {
+        ClienteDto clienteDto = getClienteDto();
+        Cliente cliente = new Cliente(clienteDto);
 
-        when(clienteService.buscarClientePorDni(12345678L)).thenReturn(cliente);
+        when(clienteService.buscarClientePorDni(cliente.getDni())).thenReturn(cliente);
 
-        ResponseEntity<Cliente> response = clienteController.getClienteByID(12345678L);
+        ResponseEntity<Cliente> respuesta = clienteController.getClienteByID(cliente.getDni());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(cliente, response.getBody());
+        assertEquals(HttpStatus.OK, respuesta.getStatusCode());
+        assertEquals(cliente, respuesta.getBody());
     }
 
     @Test
     public void testAltaCliente() throws ClienteAlreadyExistsException, DatoIngresadoInvalidoException, ClienteMenorDeEdadException {
+        ClienteDto clienteDto = getClienteDto();
+        Cliente cliente = new Cliente(clienteDto);
+
+        when(clienteService.darDeAltaCliente(clienteDto)).thenReturn(cliente);
+
+        ResponseEntity<?> respuesta = clienteController.altaCliente(clienteDto);
+
+        assertEquals(HttpStatus.CREATED, respuesta.getStatusCode());
+        assertEquals(cliente, respuesta.getBody());
+    }
+
+    public ClienteDto getClienteDto(){
         ClienteDto clienteDto = new ClienteDto();
         clienteDto.setNombre("Macarena");
         clienteDto.setApellido("Huarte");
-        clienteDto.setDni(45037310L);
+        clienteDto.setDni(12345678L);
         clienteDto.setFechaNacimiento(LocalDate.of(2003, 2, 11));
-
-        Cliente cliente = new Cliente();
-        cliente.setDni(45037310L);
-        cliente.setNombre("Macarena");
-
-        // Configuro el mock
-        when(clienteService.darDeAltaCliente(clienteDto)).thenReturn(cliente);
-
-        // Ejecuto el controller
-        ResponseEntity<?> response = clienteController.altaCliente(clienteDto);
-
-        // Verifico el resultado
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(cliente, response.getBody());
+        clienteDto.setTipoPersona("F");
+        return clienteDto;
     }
 
 }
