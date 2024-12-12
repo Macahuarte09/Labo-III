@@ -40,6 +40,15 @@ public class CuentaController {
         Cuenta cuenta = cuentaService.darDeAltaCuenta(cuentaDto);
         return new ResponseEntity<>(cuenta, HttpStatus.CREATED);
     }
+    @PostMapping("/deposito")
+    public <DepositoRequest> ResponseEntity<?> realizarDeposito(@RequestBody DepositoRequest request) {
+        // Asegúrate de que la cuenta existe y tenga suficiente saldo, luego agregar el monto al saldo de la cuenta
+        return ResponseEntity.ok().body("Depósito realizado");
+    }
+    @PostMapping("/extraccion")
+    public <ExtraccionRequest> ResponseEntity<?> realizarExtraccion(@RequestBody ExtraccionRequest request) {
+        return ResponseEntity.ok().body("Extracción realizada");
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarCuenta(@PathVariable("id") long id) throws CuentaNoEncontradaException{
