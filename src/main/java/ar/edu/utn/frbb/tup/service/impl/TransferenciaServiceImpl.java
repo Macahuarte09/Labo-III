@@ -35,8 +35,8 @@ public class TransferenciaServiceImpl implements TransferenciaService {
     }
 
     @Override
-    public Transferencia realizarTransferencia(TransferenciaDto transferenciaDto) throws CuentaNoEncontradaException,
-            NoAlcanzaException, TipoMonedaException, CuentaNoEncontradaException, CuentaOrigenYdestinoException{
+    public Transferencia realizarTransferencia(TransferenciaDto transferenciaDto)
+            throws CuentaNoEncontradaException, NoAlcanzaException, TipoMonedaException, CuentaOrigenYdestinoException {
 
         Transferencia transferencia = new Transferencia(transferenciaDto);
 
@@ -48,11 +48,17 @@ public class TransferenciaServiceImpl implements TransferenciaService {
         Cuenta cuentaOrigen = cuentaDao.findCuenta(cuentaOrigenNumero);
         Cuenta cuentaDestino = cuentaDao.findCuenta(cuentaDestinoNumero);
 
-        if (cuentaOrigen == null) {throw new CuentaNoEncontradaException("Cuenta origen no encontrada");}
+        if (cuentaOrigen == null) {
+            throw new CuentaNoEncontradaException("Cuenta origen no encontrada");
+        }
 
-        if (cuentaOrigen.getBalance() < monto) {throw new NoAlcanzaException("Saldo insuficiente en la cuenta origen");}
+        if (cuentaOrigen.getBalance() < monto) {
+            throw new NoAlcanzaException("Saldo insuficiente en la cuenta origen");
+        }
 
-        if (cuentaOrigen.getMoneda() != tipoMoneda.fromString(moneda)) {throw new TipoMonedaException("El tipo de moneda ingresado, no coincide con el tipo de moneda de las cuentas bancarias");}
+        if (!cuentaOrigen.getMoneda().equals(tipoMoneda.fromString(moneda))) {
+            throw new TipoMonedaException("El tipo de moneda ingresado no coincide con el tipo de moneda de las cuentas bancarias");
+        }
 
         if (cuentaDestino == null) {
             if (banelco.cuentaExiste(cuentaDestinoNumero)) {
@@ -61,13 +67,19 @@ public class TransferenciaServiceImpl implements TransferenciaService {
                 throw new CuentaNoEncontradaException("Cuenta destino no encontrada");
             }
         } else {
-            if (cuentaOrigen == cuentaDestino) {throw new CuentaOrigenYdestinoException("La cuenta de origen y la cuenta de destino son iguales.");}
-            if (cuentaOrigen.getMoneda() != cuentaDestino.getMoneda()) {throw new TipoMonedaException("El tipo de moneda de las cuentas bancarias no coincide");}
+            if (cuentaOrigen.getNumeroCuenta() == cuentaDestino.getNumeroCuenta()) {
+                throw new CuentaOrigenYdestinoException("La cuenta de origen y la cuenta de destino son iguales.");
+            }
+            if (!cuentaOrigen.getMoneda().equals(cuentaDestino.getMoneda())) {
+                throw new TipoMonedaException("El tipo de moneda de las cuentas bancarias no coincide");
+            }
             procesarTransferenciaInterna(cuentaOrigen, cuentaDestino, monto, transferencia);
         }
 
         cuentaDao.updateCuenta(cuentaOrigen);
-        if (cuentaDestino != null){cuentaDao.updateCuenta(cuentaDestino);}
+        if (cuentaDestino != null) {
+            cuentaDao.updateCuenta(cuentaDestino);
+        }
 
         return transferencia;
     }

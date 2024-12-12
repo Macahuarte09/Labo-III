@@ -36,6 +36,13 @@ public class Cuenta {
         int upperBound = 9000000;
         this.numeroCuenta = lowerBound + random.nextInt(upperBound); //genera numero de 7 digitos
     }
+    
+
+    public Cuenta(int i, double v) {
+    }
+
+    public Cuenta(long l, String pesos, int i) {
+    }
 
     public Cliente getTitular() {
         return titular;

@@ -1,11 +1,15 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
+import ar.edu.utn.frbb.tup.model.Cuenta;
+
 public class TransferenciaDto {
 
     private long cuentaOrigen;
     private long cuentaDestino;
     private double monto;
     private String moneda;
+
+
 
     public long getCuentaOrigen() {
         return cuentaOrigen;
